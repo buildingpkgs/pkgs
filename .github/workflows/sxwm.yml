@@ -17,15 +17,16 @@ jobs:
     steps:
     - name: Update system and install build dependencies
       run: |
-        pacman -Syu --noconfirm
-        pacman -S --noconfirm git base-devel
+        pacman -Syu --noconfirm git base-devel
 
     - name: Clone repo for PKGBUILD
       run: |
+         cd
          git clone https://github.com/buildingpkgs/pkgs.git
 
     - name: Build sxwm
       run: |
+        cd
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
