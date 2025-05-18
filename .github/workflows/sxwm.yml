@@ -21,16 +21,15 @@ jobs:
 
     - name: Clone repo for PKGBUILD
       run: |
-         cd
          git clone https://github.com/buildingpkgs/pkgs.git
 
     - name: Build sxwm
       run: |
-        cd
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
         cd pkgs/sxwm
+        mkdir /home/user/.config
         su user -c "yes|PKGDEST=/tmp/sxwm makepkg --noconfirm -s"
 
     - name: Create artifact
