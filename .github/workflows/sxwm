@@ -1,0 +1,40 @@
+name: sxwm
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sxwm.yml'
+      - 'sxwm/PKGBUILD'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-sxwm:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm git base-devel
+
+    - name: Clone repo for PKGBUILD
+      run: |
+         git clone https://github.com/buildingpkgs/pkgs.git
+
+    - name: Build sxwm
+      run: |
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        cd pkgs/sxwm
+        su user -c "yes|PKGDEST=/tmp/sxwm makepkg --noconfirm -s"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sxwm
+        path: |
+            /tmp/sxwm/*.zst
