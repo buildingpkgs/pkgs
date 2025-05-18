@@ -55,7 +55,7 @@ optdepends=('ffmpegthumbs: video thumbnails'
             'purpose: share context menu')
 groups=(kde-applications
         kde-system)
-source=(https://download.kde.org/stable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz}
+source=(https://download.kde.org/stable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz
         https://invent.kde.org/system/dolphin/-/merge_requests/862.patch)
 sha256sums=('1da30767f62d78edc9b556305c98aac89e063249e432735d2dd478d322e45add'
             'daf55b132008fe5b69a5448a09227f5244bf676bc4d036ac64e8cb4eefb1abb2')
