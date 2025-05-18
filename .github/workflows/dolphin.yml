@@ -31,6 +31,7 @@ jobs:
         chown user -R .
         cd pkgs/kio
         su user -c "yes|PKGDEST=/tmp/dolphin makepkg --noconfirm -si"
+        cd
         cd pkgs/dolphin
         su user -c "yes|PKGDEST=/tmp/dolphin makepkg --noconfirm -s"
 
