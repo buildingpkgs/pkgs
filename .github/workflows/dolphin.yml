@@ -24,11 +24,13 @@ jobs:
       run: |
          git clone https://github.com/buildingpkgs/pkgs.git
 
-    - name: Build Dolphin
+    - name: Build Dolphin (and kio for it)
       run: |
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
+        cd pkgs/kio
+        su user -c "yes|PKGDEST=/tmp/dolphin makepkg --noconfirm -si"
         cd pkgs/dolphin
         su user -c "yes|PKGDEST=/tmp/dolphin makepkg --noconfirm -s"
 
