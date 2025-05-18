@@ -1,0 +1,40 @@
+name: Build AMD only mesa-git
+
+on:
+  push:
+    paths:
+      - '.github/workflows/amd-mesa.yml'
+      - 'pkgs/dolphin/PKGBUILD'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-dolphin:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm git base-devel
+
+    - name: Clone repo for PKGBUILD
+      run: |
+         git clone https://github.com/buildingpkgs/pkgs.git
+
+    - name: Build Dolphin
+      run: |
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        cd pkgs/dolphin
+        su user -c "yes|PKGDEST=/tmp/dolphin makepkg --noconfirm -s"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dolphin
+        path: |
+            /tmp/dolphin/*.zst
