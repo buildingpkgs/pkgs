@@ -1,9 +1,9 @@
-name: Build AMD only mesa-git
+name: Build Dolphin
 
 on:
   push:
     paths:
-      - '.github/workflows/amd-mesa.yml'
+      - '.github/workflows/dolphin.yml'
       - 'dolphin/PKGBUILD'
   workflow_dispatch:
 
