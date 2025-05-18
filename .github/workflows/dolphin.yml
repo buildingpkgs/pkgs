@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/amd-mesa.yml'
-      - 'pkgs/dolphin/PKGBUILD'
+      - 'dolphin/PKGBUILD'
   workflow_dispatch:
 
 jobs:
