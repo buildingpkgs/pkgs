@@ -32,7 +32,7 @@ jobs:
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
         cd pkgs/mpv
-        su user -c "yes|PKGDEST=/tmp/mpv makepkg --noconfirm --skippgpcheck -si"
+        su user -c "yes|PKGDEST=/tmp/mpv makepkg --noconfirm -si"
 
     - name: Create artifact
       uses: actions/upload-artifact@v4
