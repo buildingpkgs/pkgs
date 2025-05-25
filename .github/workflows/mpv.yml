@@ -1,0 +1,42 @@
+name: Build mpv
+
+on:
+  push:
+    paths:
+      - '.github/workflows/mpv.yml'
+      - 'mpv/PKGBUILD'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-mpv:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm git base-devel
+
+    - name: Clone repo for PKGBUILD
+      run: |
+         cd
+         git clone https://github.com/buildingpkgs/pkgs.git
+
+    - name: Build mpv
+      run: |
+        cd
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        cd pkgs/mpv
+        su user -c "yes|PKGDEST=/tmp/mpv makepkg --noconfirm -si"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mpv
+        path: |
+            /tmp/mpv/*.zst
