@@ -4,7 +4,6 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 
 pkgname=mpv
-epoch=1
 pkgver=0.40.0
 pkgrel=4
 pkgdesc='a free, open source, and cross-platform media player'
