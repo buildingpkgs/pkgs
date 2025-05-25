@@ -27,7 +27,6 @@ jobs:
       run: |
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-        mkdir /home/user/.config
         chown user -R .
         cd pkgs/sxwm
         su user -c "yes|PKGDEST=/tmp/sxwm makepkg --noconfirm -s"
