@@ -23,6 +23,7 @@ makedepends=('git' 'meson' 'python-docutils' 'ladspa' 'wayland-protocols'
 optdepends=('yt-dlp: for video-sharing websites playback')
 provides=('libmpv.so')
 options=('!emptydirs')
+validpgpkeys=('145077D82501AA20152CACCE8D769208D5E31419') # sfan5 <sfan5@live.de>
 source=("git+https://github.com/mpv-player/mpv.git#tag=v${pkgver}?signed"
         'fix_wayland_clipboard_high_cpu_usage.patch'
         'https://patch-diff.githubusercontent.com/raw/mpv-player/mpv/pull/16373.patch')
