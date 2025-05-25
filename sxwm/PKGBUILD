@@ -9,8 +9,15 @@ url="https://github.com/uint23/sxwm"
 license=('MIT')
 depends=('libx11' 'libxinerama' 'libxcursor')
 makedepends=('gcc')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/uint23/sxwm/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('5443ae3955c50527c22253f20e1f6d5c96e6cc842ff7e3370d0f6920167148b7')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/uint23/sxwm/archive/refs/tags/v$pkgver.tar.gz"
+        "https://patch-diff.githubusercontent.com/raw/uint23/sxwm/pull/33.patch")
+sha256sums=('5443ae3955c50527c22253f20e1f6d5c96e6cc842ff7e3370d0f6920167148b7'
+            '842adfa229fc104f9a6ebd1930260cab9d0a0854546fa75cfbacae230d25dce1')
+
+
+prepare() {
+  patch -d $pkgname-$pkgver -p1 < 33.patch # Copy sxwmrc during installation
+}
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
@@ -21,5 +28,4 @@ package() {
 	cd "$srcdir/$pkgname-$pkgver"
 	install -Dm755 sxwm "$pkgdir/usr/bin/sxwm"
 	install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-	cp default_sxrc $HOME/.config/sxwmrc
 }
