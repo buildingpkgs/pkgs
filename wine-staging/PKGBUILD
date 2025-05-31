@@ -30,8 +30,8 @@ arch=(x86_64)
 options=(!lto)
 license=(LGPL-2.1-or-later)
 depends=(
-  attr
   desktop-file-utils
+  attr
   fontconfig
   freetype2
   gcc-libs
@@ -41,7 +41,12 @@ depends=(
   libxi
   libxrandr
 )
-makedepends=(autoconf bison perl flex mingw-w64-gcc
+makedepends=(
+  autoconf
+  bison
+  perl
+  flex
+  mingw-w64-gcc
   git
   alsa-lib
   ffmpeg
@@ -60,6 +65,7 @@ makedepends=(autoconf bison perl flex mingw-w64-gcc
   mesa-libgl
   opencl-headers
   opencl-icd-loader
+  pcsclite
   samba
   sane
   sdl2
@@ -82,6 +88,7 @@ optdepends=(
   libxcomposite
   libxinerama
   opencl-icd-loader
+  pcsclite
   samba
   sane
   sdl2
