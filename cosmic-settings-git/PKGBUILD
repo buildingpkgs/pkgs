@@ -10,7 +10,7 @@ url="https://github.com/pop-os/cosmic-settings"
 license=('GPL-3.0-only')
 depends=(
   'accountsservice'
-  'cosmic-icons'
+  'cosmic-icon-theme'
   'cosmic-randr'
   'fontconfig'
   'iso-codes'
