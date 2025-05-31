@@ -1,0 +1,39 @@
+name: cosmic-settings-git
+
+on:
+  push:
+    paths:
+      - '.github/workflows/cosmic-settings-git.yml'
+      - 'cosmic-settings-git/PKGBUILD'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-cosmic-settings-git:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm git base-devel
+
+    - name: Clone repo for PKGBUILD
+      run: |
+         git clone https://github.com/buildingpkgs/pkgs.git
+
+    - name: Build cosmic-settings-git
+      run: |
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        cd pkgs/cosmic-settings-git
+        su user -c "yes|PKGDEST=/tmp/cosmic-settings-git makepkg --noconfirm -s"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cosmic-settings
+        path: |
+            /tmp/cosmic-settings-git/*.zst
