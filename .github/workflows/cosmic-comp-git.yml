@@ -1,0 +1,39 @@
+name: cosmic-comp-git
+
+on:
+  push:
+    paths:
+      - '.github/workflows/cosmic-comp-git.yml'
+      - 'cosmic-comp-git/PKGBUILD'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-cosmic-comp-git:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm git base-devel
+
+    - name: Clone repo for PKGBUILD
+      run: |
+         git clone https://github.com/buildingpkgs/pkgs.git
+
+    - name: Build cosmic-comp-git
+      run: |
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        cd pkgs/cosmic-comp-git
+        su user -c "yes|PKGDEST=/tmp/cosmic-comp-git makepkg --noconfirm -s"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cosmic-comp
+        path: |
+            /tmp/cosmic-comp-git/*.zst
