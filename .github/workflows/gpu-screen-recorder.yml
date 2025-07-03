@@ -1,4 +1,4 @@
-name: wine-staging
+name: gpu-screen-recorder
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-package-wine-staging:
+  build-and-package-gpu-screen-recorder:
     runs-on: ubuntu-latest
 
     container:
@@ -17,22 +17,30 @@ jobs:
     - name: Update system and install build dependencies
       run: |
         pacman -Syu --noconfirm git base-devel
+    - name: Update system and install build dependencies
+      run: |
+        git clone https://aur.archlinux.org/gpu-screen-recorder.git
+        git clone https://aur.archlinux.org/gpu-screen-recorder-notification.git
+        git clone https://aur.archlinux.org/gpu-screen-recorder-ui.git
+        git clone https://aur.archlinux.org/gpu-screen-recorder-gtk.git
 
     - name: Build gpu-screen-recorder
       run: |
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
-        git clone https://aur.archlinux.org/gpu-screen-recorder.git
         cd gpu-screen-recorder
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
         git clone https://aur.archlinux.org/gpu-screen-recorder-notification.git
+        cd ..
         cd gpu-screen-recorder-notification
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
         git clone https://aur.archlinux.org/gpu-screen-recorder-ui.git
+        cd ..
         cd gpu-screen-recorder-ui
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
         git clone https://aur.archlinux.org/gpu-screen-recorder-gtk.git
+        cd ..
         cd gpu-screen-recorder-gtk
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
 
