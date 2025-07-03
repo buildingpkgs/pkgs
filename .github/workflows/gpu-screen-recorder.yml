@@ -17,7 +17,8 @@ jobs:
     - name: Update system and install build dependencies
       run: |
         pacman -Syu --noconfirm git base-devel
-    - name: Update system and install build dependencies
+        
+    - name: Clone the PKGBUILDs
       run: |
         git clone https://aur.archlinux.org/gpu-screen-recorder.git
         git clone https://aur.archlinux.org/gpu-screen-recorder-notification.git
@@ -31,15 +32,12 @@ jobs:
         chown user -R .
         cd gpu-screen-recorder
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
-        git clone https://aur.archlinux.org/gpu-screen-recorder-notification.git
         cd ..
         cd gpu-screen-recorder-notification
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
-        git clone https://aur.archlinux.org/gpu-screen-recorder-ui.git
         cd ..
         cd gpu-screen-recorder-ui
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
-        git clone https://aur.archlinux.org/gpu-screen-recorder-gtk.git
         cd ..
         cd gpu-screen-recorder-gtk
         su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
