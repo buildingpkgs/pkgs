@@ -1,0 +1,44 @@
+name: wine-staging
+
+on:
+  push:
+    paths:
+      - '.github/workflows/gpu-screen-recorder.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-package-wine-staging:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:base
+
+    steps:
+    - name: Update system and install build dependencies
+      run: |
+        pacman -Syu --noconfirm git base-devel
+
+    - name: Build gpu-screen-recorder
+      run: |
+        sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
+        useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown user -R .
+        git clone https://aur.archlinux.org/gpu-screen-recorder.git
+        cd gpu-screen-recorder
+        su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
+        git clone https://aur.archlinux.org/gpu-screen-recorder-notification.git
+        cd gpu-screen-recorder-notification
+        su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
+        git clone https://aur.archlinux.org/gpu-screen-recorder-ui.git
+        cd gpu-screen-recorder-ui
+        su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
+        git clone https://aur.archlinux.org/gpu-screen-recorder-gtk.git
+        cd gpu-screen-recorder-gtk
+        su user -c "yes|PKGDEST=/tmp/gpu-screen-recorder makepkg -si --noconfirm"
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: gpu-screen-recorder
+        path: |
+            /tmp/gpu-screen-recorder/*.zst
