@@ -78,7 +78,7 @@ sha512sums=('ff06b4a7854b67e36079fd2ba4c1fc9e772b8227606521cae641eb6633c872fa0f5
             'da7a97d5d3701c70dd5388b0440da39006ee4991ce174777931fea2aa8c90846a622b2b911f02ae4d5fffb92680d9a7e211c308f0f99c04896278e2ee0d9a4dc'
             'a50d202a9c2e91a4450b45c227b295e1840cc99a5e545715d69c8af789ea3dd95a03a30f050d52855cabdc9183d4688c1b534eaa755ebe93616f9d192a855ee3'
             '825b9dd0167c072ba62cabe0677e7cd20f2b4b850328022540f122689d8b25315005fa98ce867cf6e7460b2b26df16b88bb3b5c9ebf721746dce4e2271af7b97'
-            '8f3f7c45d64b338461efed1cfd30220b97dcc5cfb81fcd0e78f79bd456349ff7e6f1155e695203ebc2cba5710eae8f62b84b53f6daede302ea88e41ec8646e7f')
+            '29f59bfa15e9b5b58d40c1407cc37e063178d66115ba348759dca1f46c2c3b8606de16f00c428e560937f2b78961e48802bb64d7de687f68aa7013ad929bf1c6')
 
 _meson_version="${pkgver}-${pkgrel}"
 _systemd_src_dir="${pkgbase}"
@@ -109,7 +109,7 @@ prepare() {
   patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch
 
   # Revert commit that breaks systemd-resolved with DoT
-  patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch
+  patch -Rp1 -i ../revert.patch
 
   # return if not a git repository
   if ! git status >/dev/null 2>&1; then
