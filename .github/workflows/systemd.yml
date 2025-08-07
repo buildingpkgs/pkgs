@@ -20,14 +20,14 @@ jobs:
         
     - name: Clone the PKGBUILD
       run: |
-        git clone https://gitlab.archlinux.org/therealmate/systemd.git
+        git clone https://github.com/buildingpkgs/pkgs.git
         
     - name: Build systemd
       run: |
         sed -i 's/^#MAKEFLAGS/MAKEFLAGS/' /etc/makepkg.conf
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
-        cd systemd
+        cd pkgs/systemd
         git switch resolved
         su user -c "yes|PKGDEST=/tmp/systemd makepkg -si --skippgpcheck --noconfirm"
 
