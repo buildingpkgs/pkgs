@@ -28,6 +28,7 @@ jobs:
         useradd user -mG wheel && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
         chown user -R .
         cd systemd
+        git switch resolved
         su user -c "yes|PKGDEST=/tmp/systemd makepkg -si --skippgpcheck --noconfirm"
 
     - name: Create artifact
